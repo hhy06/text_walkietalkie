@@ -106,6 +106,12 @@ text_walkietalkie/
 - Option: Last 12 hours of messages
 - Configurable via frontend dropdown
 
-### Server Settings
+### Server Settings (Backend)
 - Default port: 5000
 - Host: 0.0.0.0 (bind to all interfaces for LAN access)
+
+### Frontend Network Settings
+- Dev server port: 3000
+- Host: 0.0.0.0 (accessible from any machine in the LAN)
+- To run on a different port: `npm run dev -- --port <PORT>`
+
