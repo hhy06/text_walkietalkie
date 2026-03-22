@@ -1,0 +1,24 @@
+The purpose of this project is to create a walkie talkie style program that shares text information within the WLAN.
+
+First, let's discuss user experience.
+After a server is started in the local area network, the user can use a local front end project to start a web page. And on the web page, you can input the port and IP of the server. If this has been used before, this information should be stored in cookie, and the user can select that information from a pull down server, from a pull down menu 
+
+The server welcomes all users and updates the most recent 100pieces of entries, or maybe all the data from within the past 12 hours, or whatever the user chooses in the front end.
+
+Now let's talk about tech.
+
+The tech stack should be as simple as possible. the backend could be a Python server, maybe in Flask
+
+Use a simple SQLite database to store the information. the server should save all the information Every piece of entry.
+
+The front end could be in vue
+It should have three parts.
+One for the server configuration and connection status. the second, the major part should be the dialogue, displaying who said what.The third part is an entry box. the user can type into this box and press send.
+
+About development.
+
+Step one, rewrite the above information and create a detailed plan. Name it Zero zero one AI development plan.
+Step two, create the backend and write a test file to use a Python script to mock the front end behavior to test the backend to see if it works.
+
+Step three, develop the actual front end.
+
