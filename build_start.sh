@@ -2,6 +2,18 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+echo "Installing backend dependencies..."
+cd "$SCRIPT_DIR/backend"
+pip install -r requirements.txt -q
+
+cd "$SCRIPT_DIR/frontend"
+if [ ! -d "node_modules" ]; then
+    echo "Installing frontend dependencies..."
+    npm install -q
+fi
+
+echo "Building frontend..."
+npm run build
 
 cd "$SCRIPT_DIR/backend"
 echo "Starting server on http://0.0.0.0:5000..."
