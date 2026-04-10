@@ -1,12 +1,13 @@
 import os
+from pathlib import Path
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 
 from database import Database
 
-FRONTEND_DIST = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "..", "frontend", "dist"
-)
+# Use pathlib for cross-platform path handling
+BASE_DIR = Path(__file__).parent.resolve()
+FRONTEND_DIST = BASE_DIR / ".." / "frontend" / "dist"
 
 app = Flask(__name__, static_folder=None)
 CORS(app)
@@ -48,8 +49,8 @@ def post_message():
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 def serve_frontend(path):
-    file_path = os.path.join(FRONTEND_DIST, path)
-    if path and os.path.isfile(file_path):
+    file_path = FRONTEND_DIST / path
+    if path and file_path.is_file():
         return send_from_directory(FRONTEND_DIST, path)
     return send_from_directory(FRONTEND_DIST, "index.html")
 
