@@ -14,6 +14,7 @@
     <MessageInput 
       :disabled="!isConnected"
       :username="currentUsername"
+      :savedUsernames="savedUsernames"
       @send="sendMessage"
       @usernameChange="updateUsername"
     />
@@ -42,6 +43,7 @@ export default {
     const connectionError = ref('')
     const messages = ref([])
     const currentUsername = ref(localStorage.getItem('walkietalkie_username') || '')
+    const savedUsernames = ref([])
     let pollInterval = null
 
     const getCookie = (name) => {
@@ -76,6 +78,24 @@ export default {
       servers.unshift({ ...serverConfig.value })
       servers = servers.slice(0, 5)
       setCookie('walkietalkie_servers', JSON.stringify(servers))
+    }
+
+    const loadSavedUsernames = () => {
+      const saved = getCookie('walkietalkie_usernames')
+      if (saved) {
+        savedUsernames.value = JSON.parse(saved)
+      }
+    }
+
+    const saveUsername = () => {
+      if (!currentUsername.value.trim()) return
+      const saved = getCookie('walkietalkie_usernames')
+      let usernames = saved ? JSON.parse(saved) : []
+      usernames = usernames.filter(u => u !== currentUsername.value.trim())
+      usernames.unshift(currentUsername.value.trim())
+      usernames = usernames.slice(0, 10)
+      setCookie('walkietalkie_usernames', JSON.stringify(usernames))
+      savedUsernames.value = usernames
     }
 
     const getBaseUrl = () => {
@@ -161,10 +181,12 @@ export default {
     const updateUsername = (name) => {
       currentUsername.value = name
       localStorage.setItem('walkietalkie_username', name)
+      saveUsername()
     }
 
     onMounted(() => {
       loadSavedConfig()
+      loadSavedUsernames()
     })
 
     onUnmounted(() => {
@@ -177,6 +199,7 @@ export default {
       connectionError,
       messages,
       currentUsername,
+      savedUsernames,
       connect,
       disconnect,
       sendMessage,

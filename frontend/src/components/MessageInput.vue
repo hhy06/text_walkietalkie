@@ -1,13 +1,28 @@
 <template>
   <div class="message-input">
     <div class="username-row">
-      <input 
-        type="text" 
-        :value="username"
-        @input="$emit('usernameChange', $event.target.value)"
-        placeholder="Your name"
-        class="username-input"
-      />
+      <div class="dropdown-wrapper">
+        <input 
+          type="text" 
+          :value="username"
+          @input="$emit('usernameChange', $event.target.value)"
+          @focus="showDropdown = true"
+          @blur="hideDropdownDelayed"
+          placeholder="Your name"
+          class="username-input"
+        />
+        <span class="dropdown-arrow" @click="toggleDropdown">▼</span>
+        <div v-if="showDropdown && savedUsernames && savedUsernames.length > 0" class="custom-dropdown">
+          <div 
+            v-for="name in savedUsernames" 
+            :key="name"
+            class="dropdown-item"
+            @mousedown.prevent="selectUsername(name)"
+          >
+            {{ name }}
+          </div>
+        </div>
+      </div>
     </div>
     <div class="input-row">
       <input 
@@ -36,11 +51,35 @@ export default {
   name: 'MessageInput',
   props: {
     disabled: Boolean,
-    username: String
+    username: String,
+    savedUsernames: {
+      type: Array,
+      default: () => []
+    }
   },
   emits: ['send', 'usernameChange'],
   setup(props, { emit }) {
     const message = ref('')
+    const showDropdown = ref(false)
+
+    const hideDropdown = () => {
+      showDropdown.value = false
+    }
+
+    const hideDropdownDelayed = () => {
+      setTimeout(() => {
+        showDropdown.value = false
+      }, 200)
+    }
+
+    const toggleDropdown = () => {
+      showDropdown.value = !showDropdown.value
+    }
+
+    const selectUsername = (name) => {
+      emit('usernameChange', name)
+      showDropdown.value = false
+    }
 
     const handleSend = () => {
       if (message.value.trim()) {
@@ -51,7 +90,12 @@ export default {
 
     return {
       message,
-      handleSend
+      showDropdown,
+      handleSend,
+      hideDropdown,
+      hideDropdownDelayed,
+      toggleDropdown,
+      selectUsername
     }
   }
 }
@@ -68,18 +112,59 @@ export default {
   margin-bottom: 10px;
 }
 
+.dropdown-wrapper {
+  position: relative;
+}
+
 .username-input {
   width: 100%;
-  padding: 8px;
+  padding: 8px 30px 8px 8px;
   border: none;
   border-radius: 4px;
   background: #0f3460;
   color: #fff;
   font-size: 14px;
+  box-sizing: border-box;
 }
 
 .username-input::placeholder {
   color: #888;
+}
+
+.dropdown-arrow {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  cursor: pointer;
+  font-size: 10px;
+  user-select: none;
+}
+
+.custom-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #0f3460;
+  border-radius: 4px;
+  margin-top: 4px;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.dropdown-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 14px;
+}
+
+.dropdown-item:hover {
+  background: #1a4a7a;
 }
 
 .input-row {
