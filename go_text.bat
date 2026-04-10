@@ -1,0 +1,1 @@
+start python3.exe C:\software\text_walkietalkie\backend\app.py
