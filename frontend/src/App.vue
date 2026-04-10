@@ -35,8 +35,8 @@ export default {
   },
   setup() {
     const serverConfig = ref({
-      host: '',
-      port: 5000
+      host: 'localhost',
+      port: 12358
     })
     const isConnected = ref(false)
     const connectionError = ref('')
@@ -44,8 +44,18 @@ export default {
     const currentUsername = ref(localStorage.getItem('walkietalkie_username') || '')
     let pollInterval = null
 
+    const getCookie = (name) => {
+      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+      if (match) return decodeURIComponent(match[2]);
+      return null;
+    }
+
+    const setCookie = (name, value) => {
+      document.cookie = name + '=' + encodeURIComponent(value) + '; path=/; max-age=31536000';
+    }
+
     const loadSavedConfig = () => {
-      const saved = localStorage.getItem('walkietalkie_servers')
+      const saved = getCookie('walkietalkie_servers')
       if (saved) {
         const servers = JSON.parse(saved)
         if (servers.length > 0) {
@@ -55,7 +65,7 @@ export default {
     }
 
     const saveServerConfig = () => {
-      const saved = localStorage.getItem('walkietalkie_servers')
+      const saved = getCookie('walkietalkie_servers')
       let servers = saved ? JSON.parse(saved) : []
       const existing = servers.findIndex(s => 
         s.host === serverConfig.value.host && s.port === serverConfig.value.port
@@ -65,7 +75,7 @@ export default {
       }
       servers.unshift({ ...serverConfig.value })
       servers = servers.slice(0, 5)
-      localStorage.setItem('walkietalkie_servers', JSON.stringify(servers))
+      setCookie('walkietalkie_servers', JSON.stringify(servers))
     }
 
     const getBaseUrl = () => {

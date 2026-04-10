@@ -5,8 +5,11 @@
         type="text" 
         v-model="host" 
         placeholder="Server IP"
-        @focus="showHistory = true"
+        list="server-history-list"
       />
+      <datalist id="server-history-list">
+        <option v-for="server in savedServers" :key="`${server.host}:${server.port}`" :value="server.host"></option>
+      </datalist>
       <input 
         type="number" 
         v-model="port" 
@@ -18,16 +21,6 @@
       <button v-else @click="$emit('disconnect')" class="btn-disconnect">
         Disconnect
       </button>
-    </div>
-    <div v-if="showHistory && savedServers.length > 0" class="server-history">
-      <div 
-        v-for="server in savedServers" 
-        :key="`${server.host}:${server.port}`"
-        class="server-item"
-        @click="selectServer(server)"
-      >
-        {{ server.host }}:{{ server.port }}
-      </div>
     </div>
     <div v-if="connectionError" class="error">{{ connectionError }}</div>
     <div v-if="isConnected" class="status connected">Connected</div>
@@ -46,13 +39,18 @@ export default {
   },
   emits: ['connect', 'disconnect'],
   setup(props, { emit }) {
-    const host = ref(props.serverConfig.host || '')
-    const port = ref(props.serverConfig.port || 5000)
-    const showHistory = ref(false)
+    const host = ref(props.serverConfig.host || 'localhost')
+    const port = ref(props.serverConfig.port || 12358)
     const savedServers = ref([])
 
+    const getCookie = (name) => {
+      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+      if (match) return decodeURIComponent(match[2]);
+      return null;
+    }
+
     const loadSavedServers = () => {
-      const saved = localStorage.getItem('walkietalkie_servers')
+      const saved = getCookie('walkietalkie_servers')
       if (saved) {
         savedServers.value = JSON.parse(saved)
       }
@@ -60,16 +58,8 @@ export default {
 
     const handleConnect = () => {
       if (host.value && port.value) {
-        showHistory.value = false
         emit('connect', { host: host.value, port: port.value })
       }
-    }
-
-    const selectServer = (server) => {
-      host.value = server.host
-      port.value = server.port
-      showHistory.value = false
-      emit('connect', { host: server.host, port: server.port })
     }
 
     onMounted(() => {
@@ -84,10 +74,8 @@ export default {
     return {
       host,
       port,
-      showHistory,
       savedServers,
-      handleConnect,
-      selectServer
+      handleConnect
     }
   }
 }
@@ -138,33 +126,6 @@ button {
 .btn-disconnect {
   background: #ff4757;
   color: #fff;
-}
-
-.server-history {
-  position: absolute;
-  top: 100%;
-  left: 15px;
-  right: 15px;
-  background: #0f3460;
-  border-radius: 4px;
-  margin-top: 5px;
-  z-index: 10;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.server-item {
-  padding: 10px;
-  cursor: pointer;
-  border-bottom: 1px solid #16213e;
-}
-
-.server-item:hover {
-  background: #16213e;
-}
-
-.server-item:last-child {
-  border-bottom: none;
 }
 
 .error {

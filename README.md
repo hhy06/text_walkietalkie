@@ -18,7 +18,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-The backend server will run on `http://0.0.0.0:5000` (accessible from any machine in the LAN).
+The backend server will run on `http://0.0.0.0:12358` (accessible from any machine in the LAN).
 
 ### 2. Start the Frontend
 
@@ -36,7 +36,7 @@ On any device connected to the same network:
 
 1. Find the host machine's IP address (e.g., `192.168.1.100`)
 2. Open the browser on that machine and go to `http://localhost:3000`
-3. Enter the backend server address (e.g., `192.168.1.100:5000`) in the connection panel
+3. Enter the backend server address (e.g., `192.168.1.100:12358`) in the connection panel
 
 ### Finding Your IP Address
 
@@ -55,7 +55,7 @@ Look for IPv4 Address under your active network adapter.
 ## Network Requirements
 
 - All devices must be on the same local network (WLAN/LAN)
-- Ensure firewall allows connections on ports 3000 and 5000
+- Ensure firewall allows connections on ports 3000 and 12358
 - CORS is enabled on the backend for cross-origin requests
 
 ## Building for Production
