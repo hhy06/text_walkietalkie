@@ -1,12 +1,12 @@
 import os
-from pathlib import Path
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 
 from database import Database
 
-BASE_DIR = Path(__file__).parent.resolve()
-FRONTEND_DIST = os.path.join(str(BASE_DIR.parent), "frontend", "dist")
+FRONTEND_DIST = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "frontend", "dist"
+)
 
 app = Flask(__name__, static_folder=None)
 CORS(app)
