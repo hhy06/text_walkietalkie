@@ -236,18 +236,20 @@ export default {
   gap: 10px;
   flex-wrap: wrap;
   align-items: center;
+  width: 100%;
 }
 
+/* Inputs take 50% total (IP + port) */
 input {
-  flex: 1 1 140px;
-  min-width: 100px;
-  max-width: 180px;
+  flex: 1 1 45%;
+  min-width: 80px;
   padding: 10px;
   border: none;
   border-radius: 4px;
   background: #0f3460;
   color: #fff;
   font-size: 14px;
+  box-sizing: border-box;
 }
 
 input::placeholder {
@@ -256,15 +258,13 @@ input::placeholder {
 
 .dropdown-wrapper {
   position: relative;
-  flex: 1 1 140px;
-  min-width: 100px;
-  max-width: 180px;
+  flex: 1 1 45%;
+  min-width: 80px;
 }
 
 .port-wrapper {
-  flex: 0 0 90px;
-  min-width: 70px;
-  max-width: 90px;
+  flex: 1 1 45%;
+  min-width: 80px;
 }
 
 .dropdown-arrow {
@@ -323,13 +323,14 @@ input::placeholder {
 }
 
 button {
-  padding: 10px 20px;
+  flex: 1 1 25%;
+  min-width: 80px;
+  padding: 10px 12px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
   font-weight: bold;
-  flex-shrink: 0;
   white-space: nowrap;
 }
 
