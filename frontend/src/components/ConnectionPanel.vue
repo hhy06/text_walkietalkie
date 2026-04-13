@@ -228,17 +228,20 @@ export default {
   border-radius: 8px;
   margin-bottom: 20px;
   position: relative;
+  overflow: visible;
 }
 
 .config-row {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 input {
-  flex: 1;
-  min-width: 120px;
+  flex: 1 1 140px;
+  min-width: 100px;
+  max-width: 180px;
   padding: 10px;
   border: none;
   border-radius: 4px;
@@ -253,12 +256,15 @@ input::placeholder {
 
 .dropdown-wrapper {
   position: relative;
-  flex: 1;
-  min-width: 120px;
+  flex: 1 1 140px;
+  min-width: 100px;
+  max-width: 180px;
 }
 
 .port-wrapper {
-  flex: 0 0 100px;
+  flex: 0 0 90px;
+  min-width: 70px;
+  max-width: 90px;
 }
 
 .dropdown-arrow {
@@ -323,6 +329,8 @@ button {
   cursor: pointer;
   font-size: 14px;
   font-weight: bold;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .btn-probe {
